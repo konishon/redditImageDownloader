@@ -7,11 +7,13 @@ class DocumentParser:
         self.page = page
         self.soup = BeautifulSoup(self.page.content, 'html.parser')
 
-    def get_images(self):
-        image_list = list()
-        for ana in self.soup.findAll('div'):
-            if ana.parent.get('id') == "siteTable":
-                if ana.has_attr('data-url'):
-                     image_list.append(ana['data-url'])
+    def get_images_from_reddit(self):
+        list_of_images = list()
+        potential_image_tags = self.soup.findAll('div')
 
-        return image_list
+        for tag in potential_image_tags:
+
+           if tag.parent.get('id') == 'siteTable' and tag.has.attr('data-url'):
+                image_url = tag['data-url']
+                list_of_images.append(image_url)
+        return list_of_images
