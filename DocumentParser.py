@@ -12,8 +12,7 @@ class DocumentParser:
         potential_image_tags = self.soup.findAll('div')
 
         for tag in potential_image_tags:
-
-           if tag.parent.get('id') == 'siteTable' and tag.has.attr('data-url'):
+            if tag.parent.get('id') == "siteTable" and tag.has_attr('data-url'):
                 image_url = tag['data-url']
                 list_of_images.append(image_url)
         return list_of_images
