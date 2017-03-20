@@ -29,3 +29,10 @@ class NetworkRequest:
             return page
         if page.status_code == NetworkRequest.code_too_many_requests:
             NetworkRequest.returned_status_code = page.status_code
+
+    def check_if_valid_image(self):
+        response = requests.head(self.url)
+        maintype = response.headers['Content-Type'].split(';')[0].lower()
+        if maintype not in ('image/png', 'image/jpeg', 'image/gif'):
+            return False
+        return True

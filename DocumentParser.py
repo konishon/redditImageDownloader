@@ -1,5 +1,9 @@
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import requests
+
+# http://stackoverflow.com/questions/2792650/python3-error-import-error-no-module-name-urllib2
+from NetworkRequest import NetworkRequest
 
 
 class DocumentParser:
@@ -14,5 +18,8 @@ class DocumentParser:
         for tag in potential_image_tags:
             if tag.parent.get('id') == "siteTable" and tag.has_attr('data-url'):
                 image_url = tag['data-url']
-                list_of_images.append(image_url)
+                isValidImage = NetworkRequest(image_url).check_if_valid_image()
+                if isValidImage:
+                    print ("Added "+image_url+" to the list")
+                    list_of_images.append(image_url)
         return list_of_images
