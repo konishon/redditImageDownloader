@@ -1,10 +1,7 @@
 import os
 import random
 
-import re
-
 from DocumentParser import DocumentParser
-from ImageDownloader import ImageDownloader
 from NetworkRequest import NetworkRequest
 from StorageManager import StorageManager
 
@@ -15,7 +12,7 @@ image_pattern = "/\Ahttp.*(jpeg|jpg|gif|png)\Z/"
 
 # network request
 request = NetworkRequest()
-page = request.get_with_retry(default_retry_count, url_wallpaper)
+page = request.get_with_retry(default_retry_count, url_gmb)
 
 # # parsing page for images
 parser = DocumentParser(page)

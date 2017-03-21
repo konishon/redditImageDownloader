@@ -1,3 +1,5 @@
+import ctypes
+
 import requests
 import os
 import urllib.request
@@ -6,7 +8,7 @@ import urllib.request
 class NetworkRequest:
     code_request_success = 200
     code_too_many_requests = 429
-    returned_status_code = 0;
+    returned_status_code = 0
 
     programExitMsg = "Reddit server has stopped responding to our request."
 
@@ -39,11 +41,20 @@ class NetworkRequest:
             return True
         return False
 
-    def startImageDownload(self, image_url="",full_save_path=""):
+    def startImageDownload(self, image_url="", full_save_path=""):
+
+        print("Starting download for " + image_url)
         filename = "wallpaper"
         filenameAndHeader = urllib.request.urlretrieve(image_url, full_save_path + filename)
         header = filenameAndHeader[1]
         content_type = header['Content-Type']
         content_type_split = str.split(content_type, "/")
         file_format = "." + content_type_split[1]
+
         os.rename(full_save_path + filename, full_save_path + filename + file_format)
+
+        # todo Study this code https://stackoverflow.com/questions/21715895/creating-a-background-changer-in-python-with-ctypes-not-working
+        SPI_SETDESKWALLPAPER = 20
+        print("Setting wallpaper " + full_save_path + filename + file_format)
+        ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, full_save_path + filename + file_format,
+                                                   0x2)
