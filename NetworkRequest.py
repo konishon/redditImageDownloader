@@ -32,7 +32,10 @@ class NetworkRequest:
 
     def check_if_valid_image(self):
         response = requests.head(self.url)
-        maintype = response.headers['Content-Type'].split(';')[0].lower()
-        if maintype not in ('image/png', 'image/jpeg', 'image/gif'):
-            return False
-        return True
+        response_header = response.headers
+        if response_header.__contains__('Content-Type'):
+            maintype = response.headers['Content-Type'].split(';')[0].lower()
+            if maintype not in ('image/png', 'image/jpeg', 'image/gif'):
+                return False
+            return True
+        return False

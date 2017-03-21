@@ -2,11 +2,11 @@ import os
 
 
 class StorageManager:
-    directory = "C:\wallpaper"
+    wallpaper_dir = "\wallpaper"
 
     def __init__(self):
         self.createRootStorageDir()
 
     def createRootStorageDir(self):
-        if not os.path.exists(StorageManager.directory):
-            os.makedirs(StorageManager.directory)
+        if not os.path.exists(os.getcwd() + StorageManager.wallpaper_dir):
+            os.makedirs(os.getcwd() + StorageManager.wallpaper_dir)

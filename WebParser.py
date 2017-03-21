@@ -13,10 +13,10 @@ default_retry_count = 3
 image_pattern = "/\Ahttp.*(jpeg|jpg|gif|png)\Z/"
 
 # network request
-request = NetworkRequest(url_wallpaper)
+request = NetworkRequest(url_gmb)
 page = request.get_with_retry(default_retry_count)
-
-# parsing page for images
+#
+# # parsing page for images
 parser = DocumentParser(page)
 listofImages = parser.get_images_from_reddit()
 
@@ -24,9 +24,9 @@ listofImages = parser.get_images_from_reddit()
 storageManager = StorageManager()
 storageManager.createRootStorageDir()
 
-# downloading image
+# # downloading image
 selected_image = random.choice(listofImages)
-temp = ImageDownloader(selected_image).download_url()
+temp = ImageDownloader(selected_image).startDownload()
 
 
 def print_image_list():
