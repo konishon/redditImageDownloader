@@ -1,3 +1,4 @@
+import os
 import random
 
 import re
@@ -13,20 +14,22 @@ default_retry_count = 3
 image_pattern = "/\Ahttp.*(jpeg|jpg|gif|png)\Z/"
 
 # network request
-request = NetworkRequest(url_gmb)
-page = request.get_with_retry(default_retry_count)
-#
+request = NetworkRequest()
+page = request.get_with_retry(default_retry_count, url_wallpaper)
+
 # # parsing page for images
 parser = DocumentParser(page)
 listofImages = parser.get_images_from_reddit()
 
 # creating folder for storing image
-storageManager = StorageManager()
+currentWorkingDir = os.getcwd()
+full_directory_path = currentWorkingDir + "\wallpaper\\"
+storageManager = StorageManager(full_directory_path)
 storageManager.createRootStorageDir()
 
 # # downloading image
 selected_image = random.choice(listofImages)
-temp = ImageDownloader(selected_image).startDownload()
+request.startImageDownload(selected_image, full_directory_path)
 
 
 def print_image_list():
