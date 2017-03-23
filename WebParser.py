@@ -12,7 +12,7 @@ image_pattern = "/\Ahttp.*(jpeg|jpg|gif|png)\Z/"
 
 # network request
 request = NetworkRequest()
-page = request.get_with_retry(default_retry_count, url_gmb)
+page = request.get_with_retry(default_retry_count, url_wallpaper)
 
 # # parsing page for images
 parser = DocumentParser(page)
@@ -24,9 +24,15 @@ full_directory_path = currentWorkingDir + "\wallpaper\\"
 storageManager = StorageManager(full_directory_path)
 storageManager.createRootStorageDir()
 
+
 # # downloading image
 selected_image = random.choice(listofImages)
-request.startImageDownload(selected_image, full_directory_path)
+while True:
+    selected_image = random.choice(listofImages)
+    print("Checking if " + selected_image + " is valid Image")
+    if NetworkRequest().check_if_valid_image(selected_image):
+        request.startImageDownload(selected_image, full_directory_path)
+        break
 
 
 def print_image_list():

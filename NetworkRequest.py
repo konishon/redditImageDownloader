@@ -4,6 +4,8 @@ import requests
 import os
 import urllib.request
 
+from StorageManager import StorageManager
+
 
 class NetworkRequest:
     code_request_success = 200
@@ -13,14 +15,18 @@ class NetworkRequest:
     programExitMsg = "Reddit server has stopped responding to our request."
 
     def get_with_retry(self, max_retry_count=3, url=""):
-        for num in range(1, max_retry_count):
-            if (NetworkRequest.returned_status_code == NetworkRequest.code_request_success):
-                return page
-                break
+        # todo this needs more work
+        attempts = 0
+        while True:
             page = NetworkRequest.perform_get_request(self, url)
-        if (NetworkRequest.returned_status_code != NetworkRequest.code_request_success):
-            print(NetworkRequest.programExitMsg)
-            exit()
+            if attempts == max_retry_count:
+                print(NetworkRequest.programExitMsg)
+                break
+            elif NetworkRequest.returned_status_code == NetworkRequest.code_request_success:
+                print(NetworkRequest.programExitMsg)
+                break
+        attempts += 1
+        return page
 
     def perform_get_request(self, url):
         page = requests.get(url)
@@ -28,8 +34,11 @@ class NetworkRequest:
         if page.status_code == NetworkRequest.code_request_success:
             NetworkRequest.returned_status_code = page.status_code
             return page
-        if page.status_code == NetworkRequest.code_too_many_requests:
+        elif page.status_code == NetworkRequest.code_too_many_requests:
             NetworkRequest.returned_status_code = page.status_code
+            exit()
+        else:
+            exit()
 
     def check_if_valid_image(self, url=""):
         response = requests.head(url)
@@ -43,8 +52,8 @@ class NetworkRequest:
 
     def startImageDownload(self, image_url="", full_save_path=""):
 
-        print("Starting download for " + image_url)
-        filename = "wallpaper"
+        print(full_save_path + " full save path")
+        filename = self.getImageName(image_url, full_save_path)
         filenameAndHeader = urllib.request.urlretrieve(image_url, full_save_path + filename)
         header = filenameAndHeader[1]
         content_type = header['Content-Type']
@@ -58,3 +67,9 @@ class NetworkRequest:
         print("Setting wallpaper " + full_save_path + filename + file_format)
         ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, full_save_path + filename + file_format,
                                                    0x2)
+
+    def getImageName(self, image_url, full_save_path):
+        print("Starting download for " + image_url)
+        numberOfPresentWallpapers = StorageManager(full_save_path).count_files()
+        filename = "wallpaper_" + str(numberOfPresentWallpapers)
+        return filename
