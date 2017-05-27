@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 .idea/*
 wallpaper/*
 ._pycache_/*
 
 
+=======
+.idea/*
+wallpaper/*
+_pycache_/*
+
+>>>>>>> feature-downloadImage
