@@ -12,3 +12,5 @@ class StorageManager:
     def count_files(self):
         files = os.listdir(self.full_directory_path)
         return len(files)
+
+

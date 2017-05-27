@@ -5,6 +5,7 @@ import os
 import urllib.request
 
 from StorageManager import StorageManager
+import Wallpaper
 
 
 class NetworkRequest:
@@ -55,6 +56,16 @@ class NetworkRequest:
         print(full_save_path + " full save path")
         filename = self.getImageName(image_url, full_save_path)
         filenameAndHeader = urllib.request.urlretrieve(image_url, full_save_path + filename)
+
+        image_path = NetworkRequest.setFileExtenstion(filenameAndHeader, full_save_path, filename)
+
+
+        # todo setting wallpaper
+        Wallpaper
+
+
+    def setFileExtenstion(self, filenameAndHeader, full_save_path, filename):
+
         header = filenameAndHeader[1]
         content_type = header['Content-Type']
         content_type_split = str.split(content_type, "/")
@@ -62,11 +73,7 @@ class NetworkRequest:
 
         os.rename(full_save_path + filename, full_save_path + filename + file_format)
 
-        # todo Study this code https://stackoverflow.com/questions/21715895/creating-a-background-changer-in-python-with-ctypes-not-working
-        SPI_SETDESKWALLPAPER = 20
-        print("Setting wallpaper " + full_save_path + filename + file_format)
-        ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, full_save_path + filename + file_format,
-                                                   0x2)
+        return full_save_path + filename + file_format
 
     def getImageName(self, image_url, full_save_path):
         print("Starting download for " + image_url)
